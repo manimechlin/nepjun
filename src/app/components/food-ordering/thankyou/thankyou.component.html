@@ -1,0 +1,78 @@
+<div class="thankyou">
+    <div class="flex-center" style="flex-direction: column;">
+        <div class="map-wrapper-thank-you" *ngIf="restaurant.latitude && restaurant.longitude">
+            <agm-map id="thank-you-map" [latitude]="restaurant.latitude" [longitude]="restaurant.longitude" [zoom]="17"
+                [zoomControl]="false" [streetViewControl]="false" [minZoom]="3" [gestureHandling]="greedy">
+                <agm-marker [latitude]="restaurant.latitude" [longitude]="restaurant.longitude"></agm-marker>
+            </agm-map>
+            <!-- <div class="p-location"></div> -->
+        </div>
+        <h2>Thank you for your order!</h2>
+        <mat-icon class="close-session" (click)="gotoServices.emit(user)">close</mat-icon>
+        <!-- <img src="../assets/images/thank_you_nice.png" alt="Thank you!" class="thank-you"> -->
+        <p class="p-place-order-details">
+            <span *ngIf="restaurant.tnx_options === 'FAST-LINE'">Your order has been received and is being prepared. We
+                will send you a confirmation text to pick up your order at this location:
+                {{restaurant.location}}.</span>
+            <span *ngIf="restaurant.tnx_options === 'IN-SEAT'">Your order has been received and will begin preparation
+                shortly. We will send you a confirmation text shortly.</span>
+        </p>
+
+    </div>
+    <div class="receipt-wrapper" id="receipt">
+        <div class="receipt-title">
+            <h3>{{restaurant.name}}</h3>
+           
+                
+                <div class="flex-space-between">
+                    <p>Delivery to:</p>
+                </div>
+               
+                <div class="flex-space-between">
+                   
+                    <p>{{user.fullname}}</p>
+                </div>
+               
+                <div class="flex-space-between">
+                  
+                    <p>{{user.location}}</p>
+                </div>
+            <div class="flex-space-between mt-2 ">
+                <p>{{ order.date | date:'short' }}</p>
+                <p><span>Order</span> # <span>{{order.order_id}}</span></p>
+            </div>
+        </div>
+        <div *ngFor="let item of order.items">
+            <div class="receipt-checkout-items">
+                <p><span>{{item.item_qty}}</span>{{item.name}}</p>
+                <p>{{restaurant.currency_symbol}}{{(item.item_qty*item.price).toFixed(2)}}</p>
+            </div>
+        </div>
+
+        <div class="checkout-total">
+            <div class="flex-space-between">
+                <p>Subtotal</p>
+                <p>{{restaurant.currency_symbol}}{{(order.order_subtotal).toFixed(2)}}</p>
+            </div>
+            <div class="flex-space-between" *ngIf="order.order_tax !== 0">
+                <p>Tax</p>
+                <p>{{restaurant.currency_symbol}}{{(order.order_tax).toFixed(2)}}</p>
+            </div>
+            <div class="flex-space-between">
+                <p>Service Fee</p>
+                <p>{{restaurant.currency_symbol}}{{(order.order_service_fee).toFixed(2)}}</p>
+            </div>
+            <div class="flex-space-between">
+                <p>Delivery Fee</p>
+                <p>{{restaurant.currency_symbol}}{{(order.order_delivery_fee).toFixed(2)}}</p>
+            </div>
+            <div class="flex-space-between" style="font-weight: 600;">
+                <p>Total</p>
+                <p>{{restaurant.currency_symbol}}{{(order.order_total).toFixed(2)}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="flex-center">
+        <button mat-raised-button class="btn-got-it" (click)="printReceipt()">Got it</button>
+    </div>
+</div>

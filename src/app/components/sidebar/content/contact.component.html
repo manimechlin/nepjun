@@ -1,0 +1,11 @@
+<app-sidebar (navClicked)="toggleNav($event)"></app-sidebar>
+<div class="contact" [ngClass]="(toggle===true)?'onSidebar':'offSidebar'">
+    <div  class="leftSide">
+        <img src="../../../../assets/images/contact.png" title="Icon"/>
+    </div>
+    <div class="rightSide">
+    <p>Need help? Just email, call or text us.</p>
+    <p>team@nepjun.com</p>
+    <p>(212) 380-6335</p>
+    </div>
+</div>

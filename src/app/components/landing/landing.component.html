@@ -1,0 +1,44 @@
+ 
+  
+  <section class="location" *ngIf="locationSection">
+    <div>
+      <img class="logo" src="../assets/images/logo_dark_background.png">
+      <p class="title">Delivery and pickup for food banks and pantries.</p>
+    </div>
+  
+    <div class="locationDiv" style="position: relative;">
+      <mat-icon>location_on</mat-icon>
+      <input placeholder="Enter your address" matGoogleMapsAutocomplete [country]="us"
+        (keyup.backspace)="onKeyupBackspace($event)" (onAutocompleteSelected)="onAutocompleteSelected($event)"
+        (onLocationSelected)="onLocationSelected($event)">
+
+        <a class="learn" (click)="openModal('video-modal')">
+          <img style="height: 20px;
+          margin-right: 3px;
+          margin-top: -4px;" src="../../../assets/images/videocam-white-18dp/2x/baseline_videocam_white_18dp.png">Learn more.
+          </a>
+        <a [href]="volunteerUrl" class="extLink">Want to volunteer?</a>  
+    </div>
+    <div>
+      <button mat-raised-button [disabled]="!enabledConfirm " [ngClass]="!enabledConfirm ? 'btn-disabled' : ''" (click)="onConfirmLocation()">Confirm
+        Location</button>
+      
+      <div class="flex-center" *ngIf="!user.isLoggedIn">
+        <p class="login" (click)="onLogin()">Sign In</p>
+        <span> / </span>
+        <p class="login" (click)="onSignup()">Sign Up</p>
+      </div>
+      <div class="flex-center" *ngIf="user.isLoggedIn">
+         <p class="login" (click)="logout()">{{user.fullname}} is signed in.  (Sign out)</p>
+      </div>
+    </div>
+  </section>
+  <nepjun-modal id="video-modal">
+    <a href="javascript:void(0)" class="close" (click)="closeModal('video-modal');"></a>
+    <video id="player" poster="../../../assets/images/logo_dark_background.png"  playsinline controls>
+      <source src="../../../assets/videos/Hello Nepjun.mp4" type="video/mp4" />
+      <track kind="captions" label="English captions" srclang="en" default />
+  </video>
+</nepjun-modal>
+
+

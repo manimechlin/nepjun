@@ -1,0 +1,17 @@
+<section class="pdf-reader" *ngIf="seePdf">
+    <!-- <mat-icon class="close-session" (click)="closePdfView.emit(false)">close</mat-icon>
+     -->
+        <!-- <mat-icon (click)="closePdfView.emit(false)" class="icon-back-custom">keyboard_arrow_left</mat-icon> -->
+        <app-header bannerBackground="false" text="" (backClicked)="closePdfView.emit(false)"></app-header>
+        <div style="width: 500px;">
+        <h3 *ngIf="viewTermandService" class="pdfview">Terms</h3>
+        <h3 *ngIf="viewPrivacy" class="pdfview">Privacy Policy</h3>
+    <pdf-viewer [src]="pdfSrc" [original-size]="false" [render-text]="true" 
+        [style.visibility]="showSpinner ? 'hidden' : 'visible'"
+        (after-load-complete)="afterLoad($event)"></pdf-viewer>
+
+    <div *ngIf="showSpinner">
+        <mat-spinner mode="indeterminate" [diameter]="70"></mat-spinner>
+    </div>
+</div>
+</section>

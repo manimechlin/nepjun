@@ -1,0 +1,8 @@
+
+<app-header [bannerBackground]="true" style="cursor: pointer; font-size: 14px;" text="New York City Food Programs" (backClicked)="onGoToLanding()"></app-header>
+<iframe [src]="sanitizer.bypassSecurityTrustResourceUrl('https://map.paranoidfan.com/apikey/8vu1Mtxy-CMxs-fNuSEk')"
+frameborder="0" style="border:0"
+height="100%" width="100%"
+allowfullscreen>
+  </iframe>
+ 

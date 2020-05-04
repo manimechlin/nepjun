@@ -1,0 +1,107 @@
+<div class="main-container">
+    <div class="session-wrapper" *ngIf="!seeTermsOfService && !seePrivacyPolicy">
+        <section class="session">
+            <!-- <mat-icon (click)="backToHome()" class="icon-back">keyboard_arrow_left</mat-icon> -->
+            <app-header bannerBackground="false" text="" (backClicked)="backToHome()"></app-header>
+            <h3>Start here!</h3>
+            <p class="p-instructions">Create your account by filling out this form.</p>
+            <!-- <mat-icon class="close-session" (click)="onCloseSignup()">close</mat-icon> -->
+            <div class="form">
+                <mat-form-field>
+                    <input matInput [(ngModel)]="user.name" placeholder="Name" autofocus>
+                    <mat-error *ngIf="user.name == ''" translate>Name is required.</mat-error>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <input matInput type="email" [(ngModel)]="user.email" [pattern]="uemailPattern" #uemail="ngModel"
+                        placeholder="Email Address">
+                    <mat-error *ngIf="uemail.errors?.pattern">Please enter a valid email address.</mat-error>
+                    <mat-error *ngIf="user.email == ''">Email is required.</mat-error>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <input matInput [type]="hide ? 'password' : 'text'" [(ngModel)]="user.password"
+                        placeholder="Password">
+                    <mat-icon matSuffix (click)="hide = !hide" class="password-mat-icon">
+                        {{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                    <mat-error *ngIf="user.password == ''">Password is required.</mat-error>
+                </mat-form-field>
+
+            </div>
+
+            <p *ngIf="!isCodeVerified" class="p-instructions" style="margin-bottom: 25px; margin-top: 20px;">
+                Please verify your phone number. We will send you a text.</p>
+            <form *ngIf="!codeSent" class="autocomplete-form">
+                <mat-form-field>
+                    <input matInput placeholder="Select your country" aria-label="country" [matAutocomplete]="auto"
+                        [formControl]="countriesCtrl" [(ngModel)]="selectedCountry" #country class="p-custom"
+                        (keyup.enter)="onSelectCountry(country.value)" style="text-align: start;">
+                    <mat-autocomplete #auto="matAutocomplete">
+                        <mat-option *ngFor="let country of filteredCountries | async" [value]="country.name"
+                            (click)="onSelectCountry(country.name)">
+                            <span class="p-custom">{{ country.name }}</span>
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+            </form>
+            <div class="phone-wrapper" style="margin-top: -15px;" [style.display]="codeSent ? 'none' : 'flex'">
+                <span>{{phoneCode}}</span>
+                <mat-form-field>
+                    <input matInput type="tel" [(ngModel)]="phone" [pattern]="uphonePattern" id="phone-input"
+                        #uphone="ngModel" (keyup.enter)="sendVerificationCode()">
+                    <mat-error *ngIf="uphone.errors?.pattern">Please enter a valid phone number.</mat-error>
+                    <mat-error *ngIf="phone == ''">Phone number is required.</mat-error>
+                </mat-form-field>
+            </div>
+
+            <button *ngIf="!codeSent" mat-raised-button [ngClass]="uemail.errors?.pattern || email == '' || password == '' 
+                || name == '' || uphone.errors?.pattern || phone == '' ? 'btn-verify btn-disabled' : 'btn-verify'"
+                (click)="sendVerificationCode()" [disabled]="uemail.errors?.pattern || email == '' || password == '' 
+                || name == '' || uphone.errors?.pattern || phone == ''">
+                Get Verification Code</button>
+
+            <div class="phone-wrapper" *ngIf="codeSent && !isCodeVerified" style="flex-direction: column;">
+                <!-- <p class="p-instructions">Verification Code</p> -->
+                <mat-form-field>
+                    <input matInput placeholder="Enter Verification Code" [(ngModel)]="code" autofocus>
+                    <mat-error *ngIf="message != ''" (keyup.enter)="onVerifyCode()">{{message}}</mat-error>
+                </mat-form-field>
+            </div>
+
+            <button *ngIf="codeSent && !isCodeVerified" mat-raised-button
+                [ngClass]="code == '' ? 'btn-verify btn-disabled' : 'btn-verify'" (click)="onVerifyCode()"
+                [disabled]="code == ''">Verify Code</button>
+
+            <p class="error-message" *ngIf="message">{{message}}</p>
+
+            <p *ngIf="isCodeVerified" class="phone-verified">Your phone number has been verified.<mat-icon>done
+                </mat-icon>
+            </p>
+        </section>
+
+        <div class="btn-signup-wrapper">
+            <p class="p-instructions" style="font-size: 12px;">By signing up, you agree to our 
+                <span class="link" (click)="seeTermsOfService=true;">Terms of Service</span>  &
+                <span class="link" (click)="seePrivacyPolicy=true;">Privacy Policy</span>.</p>
+            <button mat-raised-button [ngClass]="!isCodeVerified ? 'btn-signup btn-disabled' : 'btn-signup'"
+                (click)="onCloseSignup()" [disabled]="!isCodeVerified">Sign Up</button>
+        </div>
+    </div>
+
+
+    <div *ngIf="showSpinner" class="spinner-wrapper">
+        <mat-spinner mode="indeterminate" [diameter]="70"></mat-spinner>
+    </div>
+
+        <app-pdf-reader pdfSrc="https://paranoid-cdn.s3-us-west-1.amazonaws.com/uploads/NepjunTC.pdf" [seePdf]="seeTermsOfService" [viewTermandService]="seeTermsOfService"
+        (closePdfView)="seeTermsOfService=false;">
+    
+        </app-pdf-reader>
+    
+   
+        <app-pdf-reader pdfSrc="https://paranoid-cdn.s3-us-west-1.amazonaws.com/uploads/NepjunPP.pdf" [seePdf]="seePrivacyPolicy" [viewPrivacy]="seePrivacyPolicy"
+        (closePdfView)="seePrivacyPolicy=false;">
+    
+        </app-pdf-reader> 
+
+</div>

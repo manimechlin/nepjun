@@ -1,0 +1,102 @@
+@import "./src/assets/styles/common.scss";
+
+.thankyou {
+    display: block;
+    color: white;
+    height: 100vh;
+    height: calc(var(--vh, 1vh) * 100);
+    width: 100vw;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    padding-bottom: 25px;
+    h2 {
+        font-size: 22px;
+        text-align: center;
+        text-shadow: 2px 2px #2b2040;
+        padding-top: 20px;
+    }
+    div {
+        .close-session{
+        color: indigo!important;
+        }
+    }
+    .p-place-order-details {
+        padding: 10px;
+        padding-bottom: 0;
+        font-size: 14px;
+        text-align: center;
+    }
+    
+    .receipt-wrapper {
+        background-color: $primaryColor;
+        margin: 20px auto;
+        padding: 20px;
+        border: 1px solid $borderColor;
+        width: $desktopWidth;
+    }
+    
+    .receipt-title {
+        padding-bottom: 10px;
+        font-size: 12px;
+        h3 {
+            font-size: 18px;
+            text-align: center;
+            padding-bottom: 15px;
+        }
+    }
+    
+    .receipt-checkout-items {
+        @extend .flex-space-between;
+        padding: 1px 0;
+        p {
+            font-size: 13px;
+            span {
+                padding-right: 5px;
+            }
+        }
+    }
+    .checkout-total {
+        border-bottom: 0;
+        border-top: 1px solid $borderColor;
+        font-size: 13px;
+    }
+    .btn-got-it {
+        width: $desktopWidth;
+    }
+    .map-wrapper-thank-you {
+        width: 100%;
+        margin-bottom: 0;
+    } 
+    agm-map {
+        height: 260px;
+    }
+     .mat-raised-button
+     {
+      @media (max-width:1024px)
+      {
+          max-width: 250px;
+        }
+      @media (max-width:767px)
+     {
+         max-width: 94%;
+      }
+     }
+}
+//  @media (max-width:1024px)
+//  {
+//      .thankyou
+//     {     .mat-raised-button    {
+//       max-width: 250px;
+//     }
+//     }
+// }
+@media (max-width: 768px) {
+    .thankyou {
+        .receipt-wrapper,
+        .map-wrapper-thank-you,
+        .btn-got-it {
+            width: 100%;
+        }
+       
+    }
+}

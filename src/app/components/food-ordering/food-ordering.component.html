@@ -1,0 +1,251 @@
+
+
+<app-sidebar *ngIf="locationSection" (navClicked)="toggleNav($event)"></app-sidebar>
+
+<div class="main-container " id="food-ordering"
+[ngClass]="[(locationSection===true)?'onHomePage':'no-home', toggle?'onSidebar':'offSidebar']">
+  <div class="main-c-home">
+
+    <!-- <app-sidebar></app-sidebar> -->
+    <app-landing
+      [locationSection]="locationSection"
+      [user]="user"
+      (gotoServices)="onGotoServices($event)">
+    </app-landing>
+    <section class="services" *ngIf="servicesSection">
+      <app-header [bannerBackground]="false" [text]="''" (backClicked)="backToHome()"></app-header>
+      <!-- <div>
+        <h5 class="topNav">
+          <mat-icon (click)="backToHome()" class="backicon">keyboard_arrow_left</mat-icon>
+          <span></span>
+        </h5>
+        </div> -->
+      <img class="logo" src="../assets/images/logo_dark_background.png">
+      <div>
+        <p class="loc">Your location is:</p>
+        <p style="padding-bottom: 5px;">{{user.location}}</p>
+        <p class="link" *ngIf="!showAptInput" (click)="showAptInput=true;">
+          {{user.location_apt ? user.location_apt : 'Add Apt # or Floor'}}</p>
+        <mat-form-field *ngIf="showAptInput" floatLabel="never">
+          <input matInput (keyup.enter)="onSaveApt()" (change)="onSaveApt()" [(ngModel)]="user.location_apt"
+            placeholder="Add Apt # or Floor" autofocus>
+        </mat-form-field>
+        <div class="flex-center" style="padding: 7px 0;">
+          <p class="link" (click)="showNumberOfPeopleInput=true;">
+            Family Size: <span style="padding: 0 5px;" *ngIf="!showNumberOfPeopleInput" >{{user.no_people_per_family}}</span></p>
+          <input type="number" class="people-in-family" *ngIf="showNumberOfPeopleInput"
+            style="padding: 0 5px;" autofocus
+            (change)="onChangePeopleInFamily()" (keyup.enter)="onChangePeopleInFamily()"
+            [(ngModel)]="user.no_people_per_family">
+        </div>
+        <p class="link" (click)="this.setView('locationSection')">Change Location</p>
+      </div>
+      <div style="padding-top: 50px;">
+        <p class="label">Services Available:</p>
+        <div *ngIf="options.length === 0 && !showSpinner" class="available-service">
+        <p>Unfortunately service in your area isn’t available at this moment. It will be shortly. If you give us your email address we will let you know when it is.</p>
+        <mat-form-field>
+            <input matInput type="email" [(ngModel)]="email" [pattern]="uemailPattern" #uemail="ngModel" autofocus
+                placeholder="Email Address">
+            <mat-error *ngIf="uemail.errors?.pattern">Please enter a valid email address.</mat-error>
+            <mat-error *ngIf="email == ''">Email is required.</mat-error>
+        </mat-form-field>
+        <button  (click)="submitemail($event)"
+         >Submit</button>
+       </div>
+        <button mat-raised-button *ngIf="options.indexOf('IN-SEAT') !== -1 || options.indexOf('BOTH') !== -1"
+          (click)="onServiceSelection('IN-SEAT')">
+          Delivery to your door</button>
+        <button mat-raised-button *ngIf="options.indexOf('FAST-LINE') !== -1 || options.indexOf('BOTH') !== -1"
+          (click)="onServiceSelection('FAST-LINE')">
+          Pick up at location</button>
+      </div>
+
+    </section>
+
+    <section class="restaurants" *ngIf="restaurantsSection">
+      <app-header [bannerBackground]="true" text="To: {{user.location}}" (backClicked)="onGotoServices(user)"></app-header>
+      <!-- <div class="headNav">
+      <h5>
+        <mat-icon (click)="onGotoServices(user)">keyboard_arrow_left</mat-icon>
+        <span>To: {{user.location}}</span>
+      </h5>
+    </div> -->
+      <div class="restaurant-cards-wrapper">
+        <div *ngFor="let restaurant of filteredRestaurants; let i = index; " class="restaurant-card"
+          (click)="onSelectRestaurant(restaurant)">
+          <p class="flex-center"><span>{{restaurant.name}}</span>
+            <!-- <span class="preparation-time">{{restaurant.prepare_time}} mins</span> -->
+          </p>
+          <div [style.backgroundImage]="'url('+restaurant.photo+')'"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="menu" *ngIf="menuSection">
+      <app-header [bannerBackground]="true" [text]="selectedRestaurant.name" (backClicked)="onGoToRestaurants()"></app-header>
+      <div>
+
+        <div class="navbar-menu" style="display: none;">
+          <mat-icon class="go-back-btn-menu" (click)="onGoToRestaurants()">keyboard_arrow_left</mat-icon>
+          <!-- <div class="btn-group" dropdown placement="bottom right">
+            <mat-icon dropdownToggle class="menu-icon"
+              aria-controls="dropdown-alignment">more_vert</mat-icon>
+            <ul id="dropdown-alignment" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu">
+              <li role="menuitem" class="my-dropdown-item" (click)="onChangeLocation()">Change location</li>
+              <li class="divider dropdown-divider"></li>
+              <li role="menuitem" class="my-dropdown-item" (click)="getPastOrders()">Past Orders</li>
+              <li class="divider dropdown-divider" *ngIf="userId != '0'"></li>
+                        <li role="menuitem" class="my-dropdown-item" (click)="changePaymentMethod()" *ngIf="userId != '0'">Payments</li>
+            </ul>
+          </div> -->
+        </div>
+        <div class="restaurant-photo-wrapper">
+          <img [src]="selectedRestaurant.photo" alt="cover" id="concession-photo">
+        </div>
+        <h5 class="bottomTitle" style="display: none;">{{selectedRestaurant.name}}
+          <!-- <span class="preparation-time">{{selectedRestaurant.preparation_time}} mins</span> -->
+        </h5>
+      </div>
+      <div class="menu-wrapper" [style.paddingBottom]="(cart.cart_qty>0) ? '45px' : '7px'" *ngIf="menu">
+        <mat-tab-group [@.disabled]="true" [selectedIndex]="selectedTabIndex">
+          <div *ngFor="let category of menu.categories; let i=index; ">
+            <mat-tab [label]="category.name">
+              <div *ngFor="let item of category.items; let i = index; ">
+                <div class="item-wrapper">
+                  <div class="item-content" (click)="onOpenAddQty(item.id)">
+                    <div class="item-photo">
+                      <img [src]="item.photo ? item.photo : '../assets/images/transparent_200x200.png'" alt="photo">
+                    </div>
+                    <div class="flex-start" style="flex-direction: column; width: 100%;">
+                      <p class="item-name">{{item.name}} <span class="qty" *ngIf="getQuantity(item.id)">Qty: {{getQuantity(item.id)}}</span></p>
+                      <p class="item-description">{{item.description}}</p>
+                    </div>
+                    <p class="item-price">{{selectedRestaurant.currency_symbol}}{{(item.price).toFixed(2)}}</p>
+                  </div>
+                  <div class="add-to-cart-wrapper" [id]="'cart'+item.id">
+                    <div class="flex-center">
+                      <mat-icon (click)="increaseQty()" style="margin-right: 10px;">add</mat-icon>
+                      <span>{{qty}}</span>
+                      <mat-icon (click)="decreaseQty()" style="margin-left: 10px;">remove</mat-icon>
+                    </div>
+                    <button mat-raised-button style="width: fit-content;" (click)="onAddItemToCart(item)">Add to
+                      cart</button>
+                  </div>
+                </div>
+              </div>
+            </mat-tab>
+          </div>
+        </mat-tab-group>
+      </div>
+      <button  class="btn-cart" [ngClass]="cart.cart_qty==0 ? 'btn-disabled' : ''" mat-raised-button (click)="onGoToCheckout()">
+        <p class="flex-space-between"><span>{{(cart.cart_qty)}}</span> <span>View Cart</span>
+          <span>{{selectedRestaurant.currency_symbol}}{{(cart.cart_subtotal || 0).toFixed(2)}}</span></p>
+      </button>
+    </section>
+    <section class="checkout" *ngIf="checkoutSection">
+      <div id="checkout-id">
+        <app-header [bannerBackground]="true" text="To: {{user.location}}" (backClicked)="onGotoMenu()"></app-header>
+        <!-- <app-header [bannerBackground]="true" [text]="To: {{user.location}}" class="HedNavv" (backClicked)="onGotoMenu()"></app-header> -->
+
+        <div class="checkout-wrapper" *ngIf="cart.cart_qty > 0">
+          <div *ngFor="let item of cart.items">
+            <div class="checkout-items">
+              <div class="item-content">
+                <div class="item-photo">
+                  <img *ngIf="item.photo" [src]="item.photo ? item.photo : '../assets/images/transparent_200x200.png'" alt="photo">
+                </div>
+                <p class="item-name">{{item.name}}</p>
+                <mat-icon (click)="onRemoveItem(item)">close</mat-icon>
+              </div>
+              <div class="add-qty-wrapper">
+                <p style="padding-right: 3px;">{{selectedRestaurant.currency_symbol}}{{(item.item_qty*item.price).toFixed(2)}}
+                </p>
+                <div class="flex-center" style="margin-right: 40%;">
+                  <mat-icon (click)="updateQty('+', item)" class="qty-icons" style="margin-right: 10px;">add</mat-icon>
+                  <span>Qty: {{item.item_qty}}</span>
+                  <mat-icon (click)="updateQty('-', item)" class="qty-icons" style="margin-left: 10px;">remove
+                  </mat-icon>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="checkout-total">
+            <div class="flex-center" style="margin: 25px;">
+              <button mat-raised-button style="width: fit-content;" (click)="onGotoMenu()">Add more</button>
+            </div>
+            <div class="flex-space-between">
+              <p>Subtotal</p>
+              <p>{{selectedRestaurant.currency_symbol}}{{(cart.cart_subtotal).toFixed(2)}}</p>
+            </div>
+            <div class="flex-space-between" *ngIf="cart.cart_tax !== 0">
+              <p>Tax</p>
+              <p>{{selectedRestaurant.currency_symbol}}{{(cart.cart_tax).toFixed(2)}}</p>
+            </div>
+            <div class="flex-space-between">
+              <p>Service Fee</p>
+              <p>{{selectedRestaurant.currency_symbol}}{{(cart.cart_service_fee).toFixed(2)}}</p>
+            </div>
+            <div class="flex-space-between">
+              <p>Delivery Fee</p>
+              <p>{{selectedRestaurant.currency_symbol}}{{(cart.cart_delivery_fee).toFixed(2)}}</p>
+            </div>
+            <div class="flex-space-between" style="font-weight: 600;">
+              <p>Total</p>
+              <p>{{selectedRestaurant.currency_symbol}}{{(cart.cart_total).toFixed(2)}}</p>
+            </div>
+          </div>
+
+        </div>
+
+        <button *ngIf="user.isLoggedIn" mat-raised-button class="btn-cart" (click)="onCheckout(content)">{{checkoutText}}</button>
+        <div class="btn-cart" *ngIf="!user.isLoggedIn" style="color: white;">
+          <div class="complete-purchase-txt">
+            <p>To complete purchase</p>
+          </div>
+          <div class="flex-center">
+          <p class="p-login" (click)="onLogin()">Sign In</p>
+          <pre> / </pre>
+          <p class="p-login" (click)="onSignup()">Sign Up</p>
+        </div>
+        </div>
+
+      </div>
+    </section>
+    <div class="btn-cart" *ngIf="user.isLoggedIn" style="color: white;">
+      <div class="flex-center" *ngIf="checkoutSection">
+        <p class="p-login" (click)="logout()">{{user.fullname}} is signed in.  (Sign out)</p>
+        </div>
+     </div>
+  </div>
+
+  <app-thankyou *ngIf="thankyouSection"
+    [restaurant]="selectedRestaurant"
+    [user]="user"
+    [order]="order"
+    (gotoServices)="onGotoServices($event)"></app-thankyou>
+
+  <div *ngIf="showSpinner" class="spinner-wrapper">
+    <mat-spinner mode="indeterminate" [diameter]="70"></mat-spinner>
+  </div>
+
+  <!-- DL Modal -->
+  <ng-template #content let-c="close" let-d="dismiss">
+    <div class="modal-header" style="padding: 10px 16px;">
+      <h5 class="modal-title" id="modal-basic-title">Upload your Driver Licence</h5>
+      <button id="close-modal" type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body flex-center" style="flex-direction: column;">
+      <img style="width: 100%;height: 200px;border-radius: 4px;" src="../assets/images/driver-licence.jpeg" id="dl-img">
+      <input id="fileInput" type="file" ng2FileSelect [uploader]="uploader" (change)="readUrl($event)" accept="image/*" style="display:none;" #file>
+      <div class="flex-space-between" style="margin-top: 16px; width: 100%;">
+        <button mat-raised-button style="background-color: indigo;color: white;" (click)="file.click()">Upload</button>
+        <button mat-raised-button (click)="onUploadDL()">Done</button>
+      </div>
+    </div>
+  </ng-template>
+
+</div>

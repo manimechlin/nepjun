@@ -1,0 +1,102 @@
+
+    @import '../food-ordering/food-ordering.component.scss';
+    .location {
+        @extend .flex-space-between;
+        height: 100vh;
+        max-height: 660px;
+        width: 100vw!important;
+        overflow-y: hidden;
+        overflow-x: hidden;
+        color: white;
+        flex-direction: column;
+        padding-top: 50px;
+        padding-bottom: 25px;
+        padding-left: 15px;
+        padding-right: 15px;
+        @media (max-width:1024px)
+        {
+            max-width: 500px;
+        }
+        >div{
+             width: 500px!important;
+        }
+        .login {
+            font-size: 14px;
+            text-align: center;
+            cursor: pointer;
+        }
+        .login:hover {
+            color: gray;
+        }
+        mat-icon {
+            position: absolute;
+            top: 3px;
+            left: 12px;
+            z-index: 2;
+            color: $primaryColor;
+            @media (max-width:1024px)
+            {
+                top: 5px;
+                left: 17px;
+            }
+            @media (max-width:767px)
+            {
+                left: 14px;
+            }
+        }
+        p {
+            padding: 10px;
+        }
+        p.title {
+            font-size: 15px;
+        }
+        a.extLink, a.learn {
+            color: #FFF;
+            font-size: 15px;
+            text-decoration: none;
+            cursor: pointer;
+            &:hover{
+                color: gray;
+            }
+        }
+        input {
+            background-color: white;
+            border-radius: 4px;
+            padding: 5px;
+            padding-left: 30px;
+            margin-bottom: 200px;
+            border: none;
+            // @media (max-width:1024px)
+            // {
+            //     max-width: 450px;
+            // }
+            // @media (max-width:767px)
+            // {
+            //     max-width: 100%;
+            // }
+        }
+        // .mat-raised-button
+        // {
+        //     @media (max-width:1024px)
+        //     {
+        //         max-width: 450px;
+        //     }
+        //     @media (max-width:767px)
+        //     {
+        //         max-width: 100%;
+        //     } 
+        // }
+        a.learn{
+            position: absolute;
+        }
+        
+    }
+    @media (max-width: 768px) {
+        .location {
+            // background-image: url("../../../assets/images/Mobile.png");  
+            // height: 100%!important;
+            >div{
+                 width: 90%!important;
+            }
+        }
+    }

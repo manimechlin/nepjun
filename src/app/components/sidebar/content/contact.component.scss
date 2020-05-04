@@ -1,0 +1,50 @@
+.contact
+{
+   display: flex;
+   position: absolute;
+   top: 50%;
+   left: 50%;
+   transform: translate(-50%,-50%);
+   
+   @media (max-width:767px)
+   {
+    max-width: 253px;
+    width: 100%;
+       
+   }
+    .leftSide
+{
+  
+
+    img{max-width: 60px;margin-top: 7px;}
+}
+.rightSide
+{
+    padding-left: 20px;
+    p
+    {
+        color:#fff;
+        margin: 0px 0 10px;
+    }
+}   
+   
+   
+}
+.onSidebar{
+   margin-left: 50%;
+   width:100%!important;
+   
+}
+@media (max-width:1024px) 
+{
+    .onSidebar
+    {
+    margin-left: 0%;
+    width: 100% !important;
+  
+    }
+}
+
+.offSidebar{
+    margin-left: 0%;
+}

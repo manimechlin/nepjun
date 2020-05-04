@@ -1,0 +1,32 @@
+<div class="main-container" style="justify-content: flex-start;">
+    <section class="login">
+            <!-- <mat-icon (click)="backToHome()" class="icon-back">keyboard_arrow_left</mat-icon> -->
+        <app-header bannerBackground="false" text="" (backClicked)="backToHome()"></app-header>
+        <h3>Welcome back!</h3>
+        <!-- <mat-icon class="close-session" (click)="onCloseLogin()">close</mat-icon> -->
+        <div>
+            <mat-form-field>
+                <input matInput type="email" [(ngModel)]="email" [pattern]="uemailPattern" #uemail="ngModel" autofocus
+                    placeholder="Email Address">
+                <mat-error *ngIf="uemail.errors?.pattern">Please enter a valid email address.</mat-error>
+                <mat-error *ngIf="email == ''">Email is required.</mat-error>
+            </mat-form-field>
+
+            <mat-form-field>
+                <input matInput [type]="hide ? 'password' : 'text'" [(ngModel)]="password" (keyup.enter)="onLogin()"
+                    placeholder="Password">
+                <mat-icon matSuffix (click)="hide = !hide" class="password-mat-icon">
+                    {{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                <mat-error *ngIf="password == ''">Password is required.</mat-error>
+            </mat-form-field>
+            <div><p class="label" (click)="forgotPassword()">Forgot your password?</p></div>
+
+            <small *ngIf="message" style="color: #f65b37;font-size: 12px;">{{message}}</small>
+
+        </div>
+
+        <button mat-raised-button class="btn-login"
+            [ngClass]="uemail.errors?.pattern || email == '' || password == '' ? 'btn-disabled' : ''"
+            (click)="onLogin()">Sign In</button>
+    </section>
+</div>

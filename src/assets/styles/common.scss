@@ -1,0 +1,55 @@
+$font: 'Roboto',sans-serif;
+$primaryColor: indigo;
+$secondaryColor: #280f54;
+$borderColor: #663ab7;
+$desktopWidth: 500px;
+.flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.flex-space-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.flex-start {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+p {
+    margin-bottom: 0;
+}
+
+button:focus {
+    outline: none;
+}
+
+.spinner-wrapper {
+    @extend .flex-center;
+    position: absolute;
+    top: 0;
+    height: 100vh;
+    height: calc(var(--vh, 1vh) * 100);
+    width: 100%;
+    z-index: 7000;
+    background-color: transparent;
+}
+
+.close-session {
+    position: absolute;
+    top: 10px;
+    right: 24px;
+    font-size: 30px;
+    cursor: pointer;
+    color: white;
+    z-index: 6500;
+}
+.icon-back {
+    font-size: 30px;
+    cursor: pointer;
+    color: white;
+    z-index: 6500;
+}

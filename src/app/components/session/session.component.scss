@@ -1,0 +1,189 @@
+@import '../food-ordering/food-ordering.component.scss';
+@import '../../../assets/styles/common.scss';
+.main-container {
+    @extend .flex-start;
+    flex-direction: column;
+    .login {
+        // padding: 15px;
+        color: white;
+        display: -webkit-box;
+        display: flex;
+        -webkit-box-align: center;
+        align-items: center;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        flex-direction: column;
+        h3 {
+            text-align: center;
+            padding: 69px;
+        }
+        input {
+            color: white;  
+        }
+        mat-form-field {
+            width: 94%;
+        }
+        .btn-login {
+            width: 470px;
+            position: absolute;
+            bottom: 12px;
+            z-index: 2;
+        }
+    }
+    .message {
+        font-size: 12px;
+        &.success{
+            color: #10da3e;
+        }
+        &.error{
+            color: #f65b37;
+        }
+    }
+    .mat-form-field-appearance-legacy .mat-form-field-label {
+        color: white;
+    }
+    .mat-form-field-appearance-legacy .mat-form-field-underline {
+        background-color: $borderColor;
+    }
+    .session-wrapper {
+        @extend .flex-space-between;
+        flex-direction: column;
+        height: 100vh;
+        height: calc(var(--vh, 1vh) * 100);
+        width: 100vw;
+        overflow-y: scroll;
+        overflow-x: hidden;
+        .session {
+            @extend .login;
+            height: fit-content;
+            position: relative;
+            display: -webkit-box;
+            display: flex;
+            -webkit-box-align: center;
+            align-items: center;
+            -webkit-box-orient: vertical;
+            -webkit-box-direction: normal;
+            flex-direction: column;
+            h3 {
+                padding-bottom: 15px;
+                padding-top: 25px;
+            }
+            .error-message {
+                max-width: 98%;
+                word-break: break-word;
+                padding-left: 10px;
+                color: #f65b37;
+                font-size: 12px;
+                margin-top: 10px;
+            }
+            .phone-verified {
+                @extend .flex-space-between;
+                max-width: 98%;
+                word-break: break-word;
+                padding-left: 10px;
+                padding-top: 10px;
+                padding-bottom: 10px;
+                mat-icon {
+                    color: $borderColor;
+                    font-weight: bold;
+                }
+            }
+            .form {
+                margin-top: 15px;
+            }
+            .autocomplete-form {
+                @extend .form;
+                margin-left: 12px;
+                width: 100%;
+            }
+            .phone-verification {
+                margin-bottom: 0;
+                button {
+                    background-color:#e9ecef;
+                    width: 100%;
+                    margin-top: 0;
+                }
+                button:first-child {
+                    margin-bottom: 22px;
+                }
+            }
+            .phone-wrapper {
+                display: flex;
+                position: relative;
+                width: 100%;
+                >span {
+                    position: absolute;
+                    top: 18px;
+                    left: 10px;
+                    font-size: 15px;
+                }
+                >mat-form-field {
+                    margin-bottom: 10px;
+                }
+            }
+            #phone-input {
+                padding-left: 35px;
+                font-size: 15px;
+            }
+            .p-custom {
+                color: gray;
+                font-size: 13px;
+                font-family: $font;
+            }
+            .btn-verify {
+                margin-left: 13px;
+            }
+        }
+        .btn-signup-wrapper {
+            padding: 15px;
+            width: $desktopWidth;
+        }
+        .btn-signup {
+            width: 95%;
+            margin-bottom: 25px;
+            margin-top: 10px;
+            margin-left: 13px;
+        }
+    }
+    .p-instructions {
+        color: grey;
+        font-size: 13px;
+        text-align: center;
+        max-width: 98%;
+        word-break: break-word;
+        padding-left: 10px;
+        .link {
+            text-decoration: underline;
+            cursor: pointer;
+        }
+        .link:hover {
+            color: white;
+        }
+    }
+}
+
+
+
+@media (max-width: 768px) {
+    .main-container {
+        .login {
+            .btn-login {
+                width: 470px;
+                width: 92%;
+            }
+        }
+        .session-wrapper {
+            .session {
+                .btn-verify {
+                    margin-left: 8px;
+                }
+            }
+            .btn-signup-wrapper {
+                width: 100vw;
+            }
+            .btn-signup {
+                margin-left: 8px;
+            }
+        }
+    }
+}
